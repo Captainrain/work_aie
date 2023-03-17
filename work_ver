@@ -1,0 +1,320 @@
+import vk_api
+
+from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api import VkUpload
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
+from vk_api.utils import get_random_id
+from openpyxl import Workbook
+
+import openpyxl.cell.cell
+import datetime
+
+
+session = vk_api.VkApi(token="vk1.a.Da_3-B22T6ZqQuc2GnKVLdRbddOU4m_l7BIeCwifzUquyxkszPx2kV2H1Mhqpoa0K1UsVQv4BIbIMH3kbPwSul95iN2cml3DiXkeZJKeMLKKOT-P9IYFy86jbeEopM-zCtxCp8qDcfxO0tRnKKVEocBnpqIzkXuGJw9Uzyav2a0DmP9CoEF1BTzs1k_0oxzltgn3XnNZm0JduJozLuZwDg")
+vk = session.get_api()
+longpoll = VkLongPoll(session)
+counter=1
+user_name = ''
+
+user_list=[]
+def send_text(user_id, text=None,keyboard=None):
+    post= {
+        "user_id":user_id,
+        "message": text,
+        "random_id":0,
+        "keyboard":keyboard,
+        "text":text
+        }
+    
+    if keyboard!= None:
+        post["keyboard"]=keyboard.get_keyboard()
+    
+    else:
+        post=post
+    
+    session.method("messages.send",post)
+
+def time_calc():
+    time = [
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=8,minute=0),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=9,minute=25),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=9,minute=35),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=11,minute=0),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=12,minute=0),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=13,minute=25),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=13,minute=35),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=15,minute=0),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=15,minute=10),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=16,minute=35),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=17,minute=45),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=19,minute=10),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=19,minute=20),
+        datetime.datetime(year=datetime.datetime.now().year,month=datetime.datetime.now().month,day=datetime.datetime.now().day,hour=20,minute=45),
+        
+        ]
+    
+    nt=datetime.datetime.now()
+    counter= 0
+    for i in range(0,len(time)):
+        
+        if (time[i-1]<=nt<=time[i] or time[0]<=nt<=time[1]):
+            counter=1
+            if(i!=len(time)-1):
+                out_data= "Время до конца пары: "+ str(abs(time[i+1].hour-nt.hour)) +"часов "+ str(abs(time[i+1].minute-nt.minute)) +" минут "
+                return out_data
+            else:
+                outdata = "Время до конца пары: "+ str(abs(time[13].hour-nt.hour)) +"часов "+ str(abs(time[13].minute-nt.minute)) +" минут "
+                return out_data
+            break
+        
+        if(i==len(time)-1 and counter==0):
+            out_data="Не учебное время"
+            return out_data  
+count=1
+wb = Workbook()
+w_et = Workbook()
+w_u = Workbook()
+dest_filename_i = 'data_i.xlsx'
+dest_filename_et = 'data_et.xlsx'
+dest_filename_u = 'data_u.xlsx'
+ws1 = wb.active
+ws2 = w_et.active
+ws3 = w_u.active
+group_work_list=('и-119','и-120','и-121','и-122')
+group_work_list_et=('эт-119','эт-120','эт-121','эт-122')
+group_work_list_u=('у-119','у-120','у-121','у-122')
+ws1.append(group_work_list)
+ws2.append(group_work_list_et)
+ws3.append(group_work_list_u)
+
+
+counter_group=[1,1,1,1]
+counter_group_et=[1,1,1,1]
+counter_group_u=[1,1,1,1]
+
+
+
+    
+
+def answer_the_question(user_id,text,user_list,counter_group): 
+    print("TRUE")
+    
+    if text == group_work_list[0]:
+        ws1['A'+str(counter_group[0])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list[1]:
+        ws1['B'+str(counter_group[1])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list[2]:
+        ws1['C'+str(counter_group[2])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list[3]:
+        ws1['D'+str(counter_group[3])]= user_list
+        send_text(user_id,"Успешно!")
+
+    if text == group_work_list_et[0]:
+        ws2['A'+str(counter_group_et[0])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_et[1]:
+        ws2['B'+str(counter_group_et[1])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_et[2]:
+        ws2['C'+str(counter_group_et[2])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_et[3]:
+        ws2['D'+str(counter_group_et[3])]= user_list
+        send_text(user_id,"Успешно!")
+
+    if text == group_work_list_u[0]:
+        ws3['A'+str(counter_group_u[0])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_u[1]:
+        ws3['B'+str(counter_group_u[1])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_u[2]:
+        ws3['C'+str(counter_group_u[2])]= user_list
+        send_text(user_id,"Успешно!")
+    if text == group_work_list_u[3]:
+        ws3['D'+str(counter_group_u[3])]= user_list
+        send_text(user_id,"Успешно!")
+    
+    print(text)
+    wb.save(dest_filename_i)
+    w_et.save(dest_filename_et)
+    w_u.save(dest_filename_u)
+
+def first_menu():
+    button = VkKeyboard(one_time=False)
+    button.add_openlink_button("Сайт академиии", link = "https://dksta.ru/", payload=None)
+     
+    button.add_button("Расписание занятий")
+    button.add_line()
+    button.add_button("СКС",color=VkKeyboardColor.POSITIVE)
+    button.add_line()
+    button.add_button("Конец пары",color=VkKeyboardColor.NEGATIVE)
+    button.add_button("Опрос",color=VkKeyboardColor.NEGATIVE)
+    
+    
+    return button
+
+def second_menu():
+    button_1 = VkKeyboard(one_time=False)
+    button_1.add_openlink_button("СКС РФ ios ", "https://apps.apple.com/ru/app/скс-рф/id1473711942",payload=None)
+    button_1.add_openlink_button("СКС РФ android", "https://play.google.com/store/apps/details?id=com.gorbin.sks",payload=None)
+    button_1.add_line()
+    button_1.add_button("Назад",color=VkKeyboardColor.POSITIVE)
+    return button_1
+def rasp_menu(user_id,text):
+    
+    button_kurs = VkKeyboard(one_time=False)
+    
+    
+    send_text(user_id,text="Выберите курс")
+    button_kurs.add_button('1')
+    button_kurs.add_line()
+    button_kurs.add_button('2',color= VkKeyboardColor.PRIMARY)
+    button_kurs.add_line()
+    button_kurs.add_button('3',color= VkKeyboardColor.POSITIVE)
+    button_kurs.add_line()
+    button_kurs.add_button('4',color= VkKeyboardColor.NEGATIVE)
+    send_text(user_id,text="Успешно",keyboard =button_kurs)
+    
+def update_rasp_menu(text,user_id):
+    group_list=["1","2","3","4"]
+    button_rasp= VkKeyboard(one_time=False)
+    empty_space = ""
+
+    if text.lower()==group_list[0]:
+        button_rasp.add_openlink_button("Первый курс", link="https://dksta.ru/f/aie_1_kurs_8.pdf")
+        button_rasp.add_line()
+        button_rasp.add_button("Назад",color=VkKeyboardColor.POSITIVE)
+        send_text(user_id,"Расписание вашего курса",keyboard=button_rasp)
+        
+        return 0
+
+    if text.lower()==group_list[1]:
+        button_rasp.add_openlink_button("Второй курс", link="https://dksta.ru/f/aie_2_kurs_4.pdf")
+        button_rasp.add_line()
+        button_rasp.add_button("Назад",color=VkKeyboardColor.POSITIVE)
+
+        send_text(user_id,"Расписание вашего курса",keyboard=button_rasp)
+        
+        return 0
+
+    if text.lower()==group_list[2]:
+        button_rasp.add_openlink_button("Третий курс", link="https://dksta.ru/f/aie_3_3_podgr_kurs_5.pdf")
+        button_rasp.add_line()
+        button_rasp.add_button("Назад",color=VkKeyboardColor.POSITIVE)
+        send_text(user_id,"Расписание вашего курса",keyboard=button_rasp)
+        
+        return 0
+
+    if text.lower()==group_list[3]:
+        button_rasp.add_openlink_button("Четвертый курс", link="https://dksta.ru/f/aie_4_kurs_3.pdf")
+        button_rasp.add_line()
+        button_rasp.add_button("Назад",color=VkKeyboardColor.POSITIVE)
+        send_text(user_id,"Расписание вашего курса",keyboard=button_rasp)
+        
+        return 0 
+
+def check_event(user_id,text):
+    
+    button_list = ["конец пары","опрос","начать","скс","назад","расписание занятий","какая неделя?"]
+    fac_list = ["аиэ","мтф","эим"]
+    
+    
+    if text.lower()==button_list[0]:
+        send_text(user_id,time_calc())
+
+    if text.lower() == button_list[1]:
+        user = vk.users.get(user_ids=user_id) 
+        user_name = user[0]['first_name'] +  ' ' + user[0]['last_name']
+        
+        if user_name in user_list:
+            send_text(user_id,"Вы уже прошли опрос")
+        
+        else:
+            send_text(user_id,"Введите номер группы")
+            user_list.append(user_name)
+    
+    if text.lower() == button_list[2]:
+        send_text(user_id,text='Приветствуем вас в сообществе факультета Автоматики и Электроники!',keyboard=first_menu())
+
+    if text.lower() == button_list[3]:
+        send_text(user_id,text="Успешно",keyboard=second_menu())
+
+    if text.lower() == button_list[4]:
+        send_text(user_id,text='Успешно',keyboard=first_menu())
+
+    if text.lower() == button_list[5]:
+        rasp_menu(user_id,text)
+
+    if text.lower() in fac_list:
+        rasp_menu(user_id, text)
+
+    if text.lower() in group_list:
+        update_rasp_menu(text, user_id)
+def count_group_i():
+    if text in group_work_list:
+            if text == group_work_list[0]:
+                counter_group[0]+=1
+        
+            if text == group_work_list[1]:
+                counter_group[1]+=1
+        
+            if text == group_work_list[2]:
+                counter_group[2]+=1
+        
+            if text == group_work_list[3]:
+                counter_group[3]+=1
+            answer_the_question(user_id, text.lower(), user_list[len(user_list)-1],counter_group)
+def count_group_et():
+    if text in group_work_list_et:
+            if text == group_work_list_et[0]:
+                counter_group_et[0]+=1
+        
+            if text == group_work_list_et[1]:
+                counter_group_et[1]+=1
+        
+            if text == group_work_list_et[2]:
+                counter_group_et[2]+=1
+        
+            if text == group_work_list_et[3]:
+                counter_group_et[3]+=1
+            answer_the_question(user_id, text.lower(), user_list[len(user_list)-1],counter_group)
+def count_group_u():
+    if text in group_work_list_u:
+            if text == group_work_list_u[0]:
+                counter_group_u[0]+=1
+        
+            if text == group_work_list_u[1]:
+                counter_group_u[1]+=1
+        
+            if text == group_work_list_u[2]:
+                counter_group_u[2]+=1
+        
+            if text == group_work_list_u[3]:
+                counter_group_u[3]+=1
+            answer_the_question(user_id, text.lower(), user_list[len(user_list)-1],counter_group)
+counter=0   
+group_list=["1","2","3","4"]
+flag = 1
+values = [{'count': 2,'offset':10,'out':0}]
+
+for event in VkLongPoll(session).listen():
+    
+    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+        global text 
+        text = event.message.lower()
+        user_id = event.user_id
+        check_event(user_id,text)
+        if user_name not in user_list:
+            
+            count_group_i()
+            count_group_et()
+            count_group_u()
+        
+            
+        
+        print(user_list)
+   
